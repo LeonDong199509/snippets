@@ -1,0 +1,55 @@
+class Solution:
+    def findSubstring(self, s, words):
+        # s = "barfoothefoobarman"
+        # words = ["foo", "bar"]
+
+        # Expected output:
+
+        # [0, 9]  # "barfoo" starts at 0, "foobar" starts at 9
+
+        # Fixed sliding window solution
+
+        # 🧪 Approach
+        # 1.	All words are of equal length, say word_len.
+        # 2.	Total length of the full match = word_len * len(words).
+        # 3.	Use a sliding window of that length.
+        # 4.	For each window:
+        # •	Break the substring into word_len chunks.
+        # •	Count the frequency of each word.
+        # •	Compare to the frequency of words.
+        # Time O(m*n*k), Space O(n) + O(m) + O(k)
+        # Get words count
+        words_count = {}
+        for w in words:
+            if w not in words_count:
+                words_count[w] = 1
+            else:
+                words_count[w] += 1
+        
+        window_len = len(words) * len(words[0])
+        s_len = len(s)
+        if s_len < window_len:
+            return []
+
+        result = []
+        # loop through the string with the window
+        for left in range(0, s_len-window_len+1): # m
+            right = left + window_len
+
+            word_count_now = {}
+            w_start = left
+            w_end = w_start + len(words[0])
+            while (w_end <= right): # n * k
+                current_word = s[w_start:w_end]
+                if current_word not in word_count_now:
+                    word_count_now[current_word] = 1
+                else:
+                    word_count_now[current_word] += 1
+                
+                w_start += len(words[0])
+                w_end += len(words[0])
+            
+            if word_count_now == words_count: # n
+                result.append(left)
+        return result
+
