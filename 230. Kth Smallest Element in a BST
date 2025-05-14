@@ -1,0 +1,32 @@
+# Definition for a binary tree node.
+# class TreeNode:
+#     def __init__(self, val=0, left=None, right=None):
+#         self.val = val
+#         self.left = left
+#         self.right = right
+class Solution:
+    def kthSmallest(self, root: Optional[TreeNode], k: int) -> int:
+    # An in-order traversal of a Binary Search Tree (BST) yields nodes in ascending sorted order.
+    # ✅ Core Idea:
+    # 	•	Perform an in-order traversal.
+    # 	•	Keep a counter of how many nodes we’ve visited.
+    # 	•	The moment the counter reaches k, we’ve found the kth smallest element.
+    # 🧠 Steps:
+    # 	1.	Traverse the tree using in-order traversal.
+    # 	2.	Keep track of how many nodes you’ve seen using a counter.
+    # 	3.	Return the value of the node when the counter hits k.
+
+        # Time O(n), Space O(n)
+        self.counter = 0
+        self.result = 0
+        def inorder_tranverse(node):
+            if not node:
+                return
+            inorder_tranverse(node.left)
+            self.counter += 1
+            if self.counter == k:
+                self.result = node.val
+            inorder_tranverse(node.right)
+        
+        inorder_tranverse(root)
+        return self.result
