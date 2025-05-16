@@ -1,0 +1,52 @@
+from collections import deque
+
+class Solution:
+    def minMutation(self, startGene: str, endGene: str, bank: List[str]) -> int:
+        #     Steps:
+        # 1.	Put all strings in bank into a set for O(1) lookup.
+        # 2.	Initialize a queue with the startGene.
+        # 3.	Perform BFS:
+        # •	At each step, generate all valid mutations (1-letter change).
+        # •	If mutation is in the bank and not visited:
+        # •	Add to queue and mark as visited.
+        # 4.	If endGene is found, return mutation count.
+        # 5.	If BFS finishes and endGene isn’t found, return -1.
+
+        # Time and Space both O(n)
+        def get_all_mutation(gene):
+            result = []
+
+            for i, c in enumerate(gene):
+                if c == 'A':
+                    changes = ('C', 'G', 'T')
+                elif c == 'C':
+                    changes = ('A', 'G', 'T')
+                elif c == 'G':
+                    changes = ('C', 'A', 'T')
+                else:
+                    changes = ('C', 'G', 'A')
+            
+                result += [gene[:i] + change + gene[i+1:] for change in changes]
+            return result
+
+            
+        result = 0
+        bank_set = set(bank)
+        queue = deque([(startGene, 1)])
+        visited = set()
+        while queue:
+            result += 1
+            node, steps = queue.popleft()
+            mutations = get_all_mutation(node)
+            for mt in mutations:
+                if mt in bank_set and mt not in visited:
+                    if mt == endGene:
+                        return steps
+                    visited.add(mt)
+                    queue.append((mt, steps+1))
+        
+
+        return -1
+
+            
+
